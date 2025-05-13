@@ -145,9 +145,9 @@ def compute_cvar_risk(
         for k in range(K):
             for i in range(N_obs):
                 var, _, cvar_lower = compute_var_cvar(
-                    d_nominal[n, k, i] + mu, sigma, alpha
+                    d_nominal[n, k, i] + mu, 0.2, alpha
                 )
-                print(f"var: {var}, cvar_lower: {cvar_lower}")
+                # print(f"var: {var}, cvar_lower: {cvar_lower}")
                 if cvar_lower < r_obs[i]:
                     risk += 1
         risks[n] = risk + all_costs[n]
@@ -216,6 +216,9 @@ n_star_cvar = compute_cvar_risk(
 )
 
 n_stars: list[np.intp] = [n_star_mean, n_star_worst, n_star_cvar]
+print(
+    f"Optimal trajectory indices: Mean: {n_star_mean}, Worst-case: {n_star_worst}, CVaR: {n_star_cvar}"
+)
 
 labels: list[str] = ["Mean", "Worst-case", "CVaR"]
 
@@ -240,5 +243,5 @@ plt.legend()
 # plt.title('Sampled Trajectories')
 plt.grid(True)
 plt.tight_layout()
-plt.savefig("data/fig_optimal_trajectories.pdf")
+plt.savefig("data/fig_optimal_trajectories.png", dpi=600)
 # plt.show()
